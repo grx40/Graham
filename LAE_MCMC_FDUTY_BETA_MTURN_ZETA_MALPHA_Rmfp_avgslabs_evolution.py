@@ -141,12 +141,13 @@ slabs = 2
 #Load the halo file that we will be using as a template (This is possiby the master halo list). Load this only once for the entire run
 #and load all the redshifts into a single array
 #also, make an instance of the LAE cluster for each redshift and sort them into the 8 slabs. store the results into arrays that span redshift space and do this only once per run
-halopos_z = np.zeros((len(z_starts)), dtpye = object)
-LAE_positions = np.zeros((len(z_starts)), dtype = object)
-LAE_slabs = np.zeros((len(z_starts)), dtype = object)
+halopos_z = np.zeros((len(z_starts)), dtype = object)
+LAE_positions_z = np.zeros((len(z_starts)), dtype = object)
+LAE_slabs_z = np.zeros((len(z_starts)), dtype = object)
 
 for i in range(len(z_starts)):
-    box = 'halos_z'+str(np.round(z_starts[z],1))+'0_800_300Mpc_82600201'
+    starts = 6.6
+    box = 'halos_z'+str(np.round(starts,1))+'0_800_300Mpc_82600201'
     halopos_z[i] = np.genfromtxt( box , dtype=None)
     LAE_positions_z[i] = LAEC.LAE_Cluster(halopos_z[i], HII_DIM, DIM, Box_length)
     LAE_slabs_z[i] = LAE_positions_z[i].sort_into_slabs(slabs = 8, pixelsperslab = 25)
@@ -413,7 +414,7 @@ for z in range(len(z_starts)):
 
 
 #save the fiducial number density and angular correlation function
-np.savez('fiducial_values_full.npz' , ACF_fiducial_z = ACF_fiducial_z, density_of_observable_LAEs_afterEoR_fiducial_z[z])
+np.savez('fiducial_values_full.npz' , ACF_fiducial_z = ACF_fiducial_z, density_of_observable_LAEs_afterEoR_fiducial_z = density_of_observable_LAEs_afterEoR_fiducial_z)
 
 #remove fiducial boxes
 os.system("rm ../Boxes/*" + str(5015241))
